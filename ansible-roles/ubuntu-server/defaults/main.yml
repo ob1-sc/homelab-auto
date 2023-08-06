@@ -1,0 +1,24 @@
+temp_dir           : /tmp
+ubuntu_ova         : jammy-server-cloudimg-amd64.ova
+ubuntu_ova_url_base: https://cloud-images.ubuntu.com/jammy/current/
+
+vcsa_hostname: ""
+vcsa_username: ""
+vcsa_password: ""
+datacenter   : ""
+cluster      : ""
+datastore    : ""
+
+ubuntu_vm_name     : ""
+ubuntu_vm_network  : ""
+ubuntu_vm_memory   : "4096"
+ubuntu_vm_cpus     : "4"
+ubuntu_vm_disk_size: "500"
+
+ubuntu_client_hostname      : ""
+ubuntu_client_ns_search_path: ""
+ubuntu_client_ip_address    : ""
+ubuntu_client_gateway       : ""
+ubuntu_client_nameserver    : ""
+ubuntu_client_ssh_key       : "" 
+ubuntu_client_username      : "ubuntu" 
