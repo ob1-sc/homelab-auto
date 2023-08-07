@@ -1,0 +1,52 @@
+---
+- name:  Deploy k3s Ubuntu VM
+  hosts: localhost
+  gather_facts: false
+  vars:
+    temp_dir           : "{{ playbook_params.temp_dir }}"
+    ubuntu_ova         : "{{ playbook_params.ubuntu_ova }}"
+    ubuntu_ova_url_base: "{{ playbook_params.ubuntu_ova_url_base }}"
+
+    vcsa_hostname: "{{ params.vcsa_hostname }}"
+    vcsa_username: "{{ params.vcsa_username }}"
+    vcsa_password: "{{ params.vcsa_password }}"
+    datacenter   : "{{ params.datacenter }}"
+    cluster      : "{{ params.cluster }}"
+    datastore    : "{{ params.datastore }}"
+
+    ubuntu_vm_name     : "{{ playbook_params.ubuntu_vm_name }}"
+    ubuntu_vm_network  : "{{ playbook_params.ubuntu_vm_network }}"
+    ubuntu_vm_memory   : "{{ playbook_params.ubuntu_vm_memory }}"
+    ubuntu_vm_cpus     : "{{ playbook_params.ubuntu_vm_cpus }}"
+    ubuntu_vm_disk_size: "{{ playbook_params.ubuntu_vm_disk_size }}"
+
+    ubuntu_client_hostname      : "{{ playbook_params.ubuntu_client_hostname }}"
+    ubuntu_client_ns_search_path: "{{ params.lab_network_dns_search_path }}"
+    ubuntu_client_ip_address    : "{{ (playbook_params.ubuntu_client_ip_address + '/' + params.lab_network_netmask) | ansible.netcommon.ipaddr('address/prefix') }}"
+    ubuntu_client_gateway       : "{{ params.lab_network_gateway }}"
+    ubuntu_client_nameserver    : "{{ params.lab_network_dns }}"
+    ubuntu_client_ssh_key       : "{{ params.ssh_key }}" 
+    ubuntu_client_username      : "{{ params.username }}" 
+
+  roles:
+  - ubuntu-server
+
+- name:  Setup k3s server
+  hosts: k3s
+  become: true
+  vars:
+    local_user: "{{ params.username }}"
+
+  pre_tasks:
+  - name: upgrade apt repositories
+    apt:
+      update_cache: true
+
+  roles:
+  - k3s
+
+  post_tasks:
+  - name: cleanup apt packages
+    apt:
+      autoclean: true
+      autoremove: true
