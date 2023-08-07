@@ -7,3 +7,31 @@
 
 - name: install k3s
   shell: curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
+
+- name: Read the kubeconfig
+  slurp:
+    path: /etc/rancher/k3s/k3s.yaml
+  register: kubeconfig
+
+- name: Read yaml to dictionary
+  set_fact:
+    fact_kubeconfig: "{{ kubeconfig['content'] | b64decode | from_yaml }}"
+
+- name: Update the fact
+  ansible.utils.update_fact:
+    updates:
+    - path: fact_kubeconfig.clusters[0].cluster.server
+      value: "https://{{ k3s_server_hostname }}:6443"
+  register: fact_kubeconfig
+
+- name: Write kubeconfig file
+  become: true
+  copy:
+    content: "{{ fact_kubeconfig.fact_kubeconfig | to_nice_yaml }}"
+    dest: /tmp/k3s.yaml
+
+- name: download kubeconfig
+  fetch:
+    src: /tmp/k3s.yaml
+    dest: "{{ local_kubeconfig }}"
+    flat: true

@@ -1,0 +1,2 @@
+local_kubeconfig: ~/.kube/config
+k3s_server_hostname: ""

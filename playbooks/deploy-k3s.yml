@@ -35,7 +35,8 @@
   hosts: k3s
   become: true
   vars:
-    local_user: "{{ params.username }}"
+    local_user            : "{{ params.username }}"
+    k3s_server_hostname: "{{ playbook_params.ubuntu_client_hostname }}"
 
   pre_tasks:
   - name: upgrade apt repositories

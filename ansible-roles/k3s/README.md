@@ -11,7 +11,12 @@ Requirements
 Role Variables
 --------------
 
-N/A
+All variables which can be overridden are stored in defaults/main.yml file as well as in table below.
+
+| Variable                      | Default                                          | Description                                                                   |
+|-------------------------------|--------------------------------------------------|-------------------------------------------------------------------------------|
+| k3s_server_hostname           | ""                                               | Host name of the k3s to be populated in generated kubeconfig                  |
+| local_kubeconfig              | "~/.kube/config"                                 | Location on client to download kubeconfig to                                  |
 
 Example Playbook
 ----------------
